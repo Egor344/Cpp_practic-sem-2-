@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <fstream>
+#include <vector>
 #define MAX(a, b) (a > b) ? a : b
 
 using namespace std;
@@ -28,6 +29,105 @@ struct node {
 	Record data;
 	struct node* next;
 	struct node* prev;
+};
+
+class CLDate {
+	unsigned short int day;
+	unsigned short int month;
+	unsigned short int year;
+
+public:
+	CLDate() {
+		this->day = 0;
+		this->month = 0;
+		this->year = 0;
+	}
+
+	CLDate(unsigned short int day, unsigned short int month, unsigned short int year) {
+		this->day = day;
+		this->month = month;
+		this->year = year;
+	}
+
+	void SetDay(unsigned short int day) {
+		this->day = day;
+	}
+
+	unsigned short int GetDay() const {
+		return this->day;
+	}
+
+	void SetMonth(unsigned short int month) {
+		this->month = month;
+	}
+
+	unsigned short int GetMonth() const {
+		return this->month;
+	}
+
+	void SetYear(unsigned short int year) {
+		this->year = year;
+	}
+
+	unsigned short int GetYear() const {
+		return this->year;
+	}
+
+	bool СheckDate() const {
+		if (this->day < 0 || this->day > 31) {
+			return false;
+		}
+		return true;
+	}
+};
+
+class CLRecord {
+	string company;
+
+
+
+private:
+	unsigned long int sales;
+protected:
+	double procent;
+	CLDate date;
+
+public:
+	int Number_of_products;
+
+	CLRecord() {
+		this->company = "";
+		this->Number_of_products = 0;
+		this->sales = 0;
+		this->procent = 0;
+		this->date = { 0, 0, 0 };
+	}
+
+	CLRecord(string company, int number_of_products, unsigned long int sales, double procent, CLDate date) {
+		this->company = std::move(company);
+		this->Number_of_products = number_of_products;
+		this->sales = sales;
+		this->procent = procent;
+		this->date = date;
+	}
+
+	void SetCompany(string newCompany) {
+		this->company = std::move(newCompany);
+	}
+
+	void SetProcent(int newProcent) {
+		this->procent = newProcent;
+	}
+
+	void SetSales(unsigned long int newSales) {
+		this->sales = std::move(newSales);
+	}
+
+	void SetDate(Date newDate) {
+		this->date.SetDay(newDate.day);
+		this->date.SetMonth(newDate.month);
+		this->date.SetYear(newDate.year);
+	}
 };
 
 int countItem = 0;
@@ -542,4 +642,31 @@ int main()
 	}
 	fclose(MyFileTxt);
 	Draw(fileRecords, 4);
+
+	cout << endl << "Практика 5" << endl << endl;
+
+	static CLDate clDate1(2,2,2222);
+	static CLDate clDate2;
+
+	static CLDate clDate(30,3,3333);
+
+	static CLDate DC = clDate;
+	DC.SetDay(DC.GetDay() + 5);
+	if (!DC.СheckDate()) {
+		cout << "Недопустимая дата" << endl;
+		DC.SetDay(DC.GetDay() - 5);
+	}
+	static CLRecord staticClRecord;
+	CLRecord clRecord;
+
+	vector<CLRecord> clRecords;
+
+	for (auto line : lines) {
+		clRecord.Number_of_products = line.number_of_products;
+		clRecord.SetCompany(line.company);
+		clRecord.SetSales(line.sales);
+		clRecord.SetProcent(line.procent);
+		clRecord.SetDate(line.date);
+		clRecords.push_back(clRecord);
+	}
 }
