@@ -463,31 +463,15 @@ int main()
 	fclose(MyFileTxt);
 	Draw(readRecords, 3);
 
-	/*FILE* MyFileBinary;
-	fopen_s(&MyFileBinary, "MyFileBinary.bin", "w+");
-	for (int i = 0; i < 3; i++) {
-		fprintf(MyFileBinary, "%s %d %lu %lf %hu %hu %hu \n", \
-			lines[i].company, \
-			lines[i].number_of_products, \
-			lines[i].sales, \
-			lines[i].procent, \
-			lines[i].date.day, lines[i].date.month, lines[i].date.year);
-	}
-	fclose(MyFileBinary);
+	FILE* binaryFile;
+	fopen_s(&binaryFile, ".File.txt", "w");
+	fwrite(lines, sizeof(lines), 1, binaryFile);
+	fclose(binaryFile);
 
-	fopen_s(&MyFileBinary, "MyFileBinary.bin", "r");
-	Record readRecords[3];
-	for (int i = 0; i < 3; i++) {
-		fscanf_s(MyFileBinary, "%s", readRecords[i].company, _countof(readRecords[i].company));
-		fscanf_s(MyFileBinary, "%d", &readRecords[i].number_of_products);
-		fscanf_s(MyFileBinary, "%lu", &readRecords[i].sales);
-		fscanf_s(MyFileBinary, "%lf", &readRecords[i].procent);
-		fscanf_s(MyFileBinary, "%hu", &readRecords[i].date.day);
-		fscanf_s(MyFileBinary, "%hu", &readRecords[i].date.month);
-		fscanf_s(MyFileBinary, "%hu", &readRecords[i].date.year);
-	}
-	fclose(MyFileBinary);
-	Draw(readRecords, 3);*/
+	fopen_s(&binaryFile, ".File.txt", "rb");
+	fread_s(readRecords, sizeof(readRecords), sizeof(readRecords), 1, binaryFile);
+	fclose(binaryFile);
+	Draw(readRecords, 3);
 
 	Record inRecord;
 	char company[20];
